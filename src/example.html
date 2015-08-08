@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+<script src="tree-multi-select.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<style>
+	.dropdown-body-wrapper
+	{
+		position:fixed;
+		z-index:1;
+		width:100%;
+		height:100%;
+	}
+	.tree-multiselect
+	{
+		position:relative;
+	}
+	.tree-container .dropdown-wrapper
+	{
+		position:absolute;
+		z-index:2;
+		width: 200px;
+		border: 1px solid #DDD;
+		margin-top: 1px;
+		box-shadow: 0px 0px 1px #EEE;
+		overflow:auto;
+		background: #FFF;
+	}
+	.tree-container .dropdown-wrapper > div >ul > li
+	{
+		margin:10px;
+	}
+	.tree-container li
+	{
+		list-style:none;
+		margin:10px 18px;
+	}
+	.tree-container ul
+	{
+		margin: 0px;
+		padding: 0px;
+	}
+	.tree-container .arrow
+	{
+		width:10px;
+		display:inline-block;
+		cursor:pointer;
+		
+	}
+	.tree-container li span
+	{
+		vertical-align:middle;
+	}
+	.search-contaier input{
+		  width: 200px;
+	}
+	.tree-multiselect .result li
+	{
+		list-style:none;
+	}
+	.tree-multiselect .result
+	{
+		max-width:200px;
+		overflow:auto;
+		border: 1px solid #3498db;
+		margin: 2px 0;
+	}
+	.tree-multiselect .result ul
+	{
+		padding: 0 5px;
+		margin: 5px;
+	}
+	.tree-multiselect .arrow
+	{
+		width:10px;
+		display:inline-block;	
+	}
+</style>
+
+<script>
+	var app = angular.module('exApp',['treeMultiSelect'])
+	app.controller('exController',function($scope,$log)
+	{
+				$scope.data = [
+					{
+						name:"bangalore",
+						children:[
+							{name:"JP nagar",children:[
+								{name:"no.14",children:[]}
+							
+							]}
+						]
+					
+					},
+					{
+						name:"mysore",
+						children:[
+							{name:"Vidya nagar",children:[]}
+						]
+					
+					}
+				];
+	
+	});
+</script>
+
+</head>
+<body>
+
+<div ng-app="exApp">
+	<div ng-controller="exController">
+		<div ng-tree-multiselect='' data-treedata="data"></div>
+		
+		<script type="text/ng-template" id="/treeTemplate.html">
+			<div class="tree-multiselect">
+				<div class="dropdown-body-wrapper" ng-hide="hideDropdown" ng-click="hideDropdown=true;">	
+				</div>
+				<div class="search-contaier">
+					<input type="text" ng-model="seachText" ng-focus="showDropdown()"/>
+				</div>
+				<div class="tree-container" ng-hide="hideDropdown">
+					<div class="dropdown-wrapper" >
+						<div ng-include="'tree-repeater.html'"></div>
+					</div>
+				</div>
+				<div class="result" ng-hide="showResult()">
+					<div ng-include="'tree-result-repeater.html'"></div>
+				</div>
+			</div>
+		</script>
+		
+		<script type="text/ng-template" id="tree-repeater.html">
+			<ul ng-hide="$parent.data.hide">
+				<li ng-hide="data.hideRow" ng-init="initPattern($index,data,$parent.data)" ng-repeat="data in data.children">
+					<div>
+						<span class="arrow"><i class="fa" ng-click="toggleHide(data)" ng-show="hasChildren(data)" ng-class="getArrowClass(data.hide)"></i></span>
+						<span id="{{data.id}}" class="title"><input type="checkbox" ng-checked="data.selected" ng-model="data.selected" ng-click="childSelect(data)"/>{{data.name}}</span>
+					</div>
+					<div ng-if="hasChildren(data)" ng-include="'tree-repeater.html'">
+					
+					</div>
+				</li>
+				
+			</ul>
+		</script>
+		<script type="text/ng-template" id="tree-result-repeater.html">
+			<ul>
+				<li ng-repeat="output in output.children">
+					<div>
+						<span class="arrow"><i class="fa" ng-show="hasChildren(output)" ng-class="getArrowClass(false)"></i></span>
+						<span id="{{output.id}}" class="title">{{output.name}}</span>
+					</div>
+					<div ng-if="hasChildren(output)" ng-include="'tree-result-repeater.html'">
+					
+					</div>
+				</li>
+				
+			</ul>
+		</script>
+	</div>
+</div>
+
+
+
+</body>
+</html>

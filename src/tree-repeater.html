@@ -1,0 +1,12 @@
+<ul ng-hide="$parent.data.hide">
+	<li ng-hide="data.hideRow" ng-init="initPattern($index,data,$parent.data)" ng-repeat="data in data.children">
+		<div>
+			<span class="arrow"><i class="fa" ng-click="toggleHide(data)" ng-show="hasChildren(data)" ng-class="getArrowClass(data.hide)"></i></span>
+			<span id="{{data.id}}" class="title"><input type="checkbox" ng-checked="data.selected" ng-model="data.selected" ng-click="childSelect(data)"/>{{data.name}}</span>
+		</div>
+		<div ng-if="hasChildren(data)" ng-include="'tree-repeater.html'">
+		
+		</div>
+	</li>
+	
+</ul>

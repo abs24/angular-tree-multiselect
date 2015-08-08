@@ -1,0 +1,12 @@
+<ul>
+	<li ng-repeat="output in output.children">
+		<div>
+			<span class="arrow"><i class="fa" ng-show="hasChildren(output)" ng-class="getArrowClass(false)"></i></span>
+			<span id="{{output.id}}" class="title">{{output.name}}</span>
+		</div>
+		<div ng-if="hasChildren(output)" ng-include="'tree-result-repeater.html'">
+		
+		</div>
+	</li>
+	
+</ul>
